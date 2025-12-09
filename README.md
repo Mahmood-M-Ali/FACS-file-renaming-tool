@@ -54,3 +54,14 @@ git clone https://github.com/Mahmood-M-Ali/FACS-File-Renaming-Tool.git
 # Launch the app
 shiny::runApp("FACS-File-Renaming-Tool/app.R")
 
+## Output
+Preview Table: Original vs. renamed filenames
+
+ZIP Download: Renamed .fcs files ready for IC50 analysis
+
+Author
+Mahmood Mohammed Ali Université Grenoble Alpes | Institute for Advanced Biosciences Epigenetics of Regeneration and Cancer Group
+
+mahmood.mohammed-ali@univ-grenoble-alpes.fr
+GitHub: @Mahmood-M-Ali
+LinkedIn: Mahmood Mohammed Ali
