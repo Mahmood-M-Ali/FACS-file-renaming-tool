@@ -1,3 +1,12 @@
+This work is licensed under Creative Commons Attribution-NonCommercial 4.0 International License.
+
+Author
+Mahmood Mohammed Ali Université Grenoble Alpes | Institute for Advanced Biosciences Epigenetics of Regeneration and Cancer Group
+
+mahmood.mohammed-ali@univ-grenoble-alpes.fr 
+GitHub: @Mahmood-M-Ali 
+LinkedIn: Mahmood Mohammed Ali
+
 #  FACS File Renaming Tool — Helper Utility for FlowIC50
 
 [![R](https://img.shields.io/badge/R-%3E%3D4.0-blue)](https://www.r-project.org/)
@@ -40,6 +49,13 @@ By ensuring consistent file naming, this tool makes downstream analysis with the
 
 ---
 
+### Output
+Preview Table: Original vs. renamed filenames
+
+ZIP Download: Renamed .fcs files ready for IC50 analysis
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -54,14 +70,5 @@ git clone https://github.com/Mahmood-M-Ali/FACS-File-Renaming-Tool.git
 # Launch the app
 shiny::runApp("FACS-File-Renaming-Tool/app.R")
 
-## Output
-Preview Table: Original vs. renamed filenames
 
-ZIP Download: Renamed .fcs files ready for IC50 analysis
 
-Author
-Mahmood Mohammed Ali Université Grenoble Alpes | Institute for Advanced Biosciences Epigenetics of Regeneration and Cancer Group
-
-mahmood.mohammed-ali@univ-grenoble-alpes.fr
-GitHub: @Mahmood-M-Ali
-LinkedIn: Mahmood Mohammed Ali
