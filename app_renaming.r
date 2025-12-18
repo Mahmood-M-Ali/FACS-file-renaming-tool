@@ -107,79 +107,79 @@ ui <- fluidPage(
       p("Convert plate-based FCS files to standardized naming convention")),
   
   div(style = "max-width: 1400px; margin: 0 auto; padding: 0 20px;",
-    
-    # Step 1: Upload Files
-    div(class = "step-box",
-        h4(icon("upload"), " Step 1: Upload FCS Files"),
-        fileInput("files", "Select .fcs files from your plate experiment:",
-                  multiple = TRUE,
-                  accept = c(".fcs", ".FCS"),
-                  width = "100%"),
-        uiOutput("upload_status")
-    ),
-    
-    # Step 2: Define Plate Layout
-    conditionalPanel(
-      condition = "output.files_uploaded",
       
+      # Step 1: Upload Files
       div(class = "step-box",
-          h4(icon("th"), " Step 2: Define Plate Layout"),
-          
-          fluidRow(
-            column(6,
-                   h5("Define Rows (Cell Lines)"),
-                   uiOutput("row_inputs")
-            ),
-            column(6,
-                   h5("Define Columns (Treatments & Concentrations)"),
-                   
-                   # Apply to all option
-                   div(class = "apply-all-box",
-                       h6(icon("magic"), " Quick Fill Options"),
-                       fluidRow(
-                         column(6,
-                                textInput("apply_all_treatment", 
-                                          "Treatment Name:",
-                                          placeholder = "e.g., YF2")),
-                         column(6,
-                                actionButton("btn_apply_all_treatment", 
-                                             "Apply to All Columns",
-                                             class = "btn-warning btn-sm",
-                                             icon = icon("copy"),
-                                             style = "margin-top: 25px;"))
-                       )
-                   ),
-                   
-                   uiOutput("col_inputs")
-            )
-          )
+          h4(icon("upload"), " Step 1: Upload FCS Files"),
+          fileInput("files", "Select .fcs files from your plate experiment:",
+                    multiple = TRUE,
+                    accept = c(".fcs", ".FCS"),
+                    width = "100%"),
+          uiOutput("upload_status")
       ),
       
-      # Step 3: Preview & Download
-      div(class = "step-box",
-          h4(icon("eye"), " Step 3: Preview Renamed Files"),
-          actionButton("preview", "Generate Preview", 
-                       class = "btn-primary btn-lg",
-                       icon = icon("cogs"),
-                       style = "margin-bottom: 15px;"),
-          br(),
-          DTOutput("preview_table"),
-          br(),
-          uiOutput("download_ui")
-      )
-    ),
-    
-    # Info Box
-    div(class = "info-box",
-        h5(icon("info-circle"), " Target Format"),
-        p("Files will be renamed to: ", 
-          tags$code("CellLine_Treatment_ConcentrationuM_Replicate.fcs")),
-        p(strong("Examples:")),
-        tags$ul(
-          tags$li(tags$code("Ly18_YF2_0uM_Rep1.fcs")),
-          tags$li(tags$code("HT_DMSO_50uM_Rep2.fcs")),
-          tags$li(tags$code("SUDHL4_Compound_10.5uM_Rep1.fcs"))
-        ))
+      # Step 2: Define Plate Layout
+      conditionalPanel(
+        condition = "output.files_uploaded",
+        
+        div(class = "step-box",
+            h4(icon("th"), " Step 2: Define Plate Layout"),
+            
+            fluidRow(
+              column(6,
+                     h5("Define Rows (Cell Lines)"),
+                     uiOutput("row_inputs")
+              ),
+              column(6,
+                     h5("Define Columns (Treatments & Concentrations)"),
+                     
+                     # Apply to all option
+                     div(class = "apply-all-box",
+                         h6(icon("magic"), " Quick Fill Options"),
+                         fluidRow(
+                           column(6,
+                                  textInput("apply_all_treatment", 
+                                            "Treatment Name:",
+                                            placeholder = "e.g., YF2")),
+                           column(6,
+                                  actionButton("btn_apply_all_treatment", 
+                                               "Apply to All Columns",
+                                               class = "btn-warning btn-sm",
+                                               icon = icon("copy"),
+                                               style = "margin-top: 25px;"))
+                         )
+                     ),
+                     
+                     uiOutput("col_inputs")
+              )
+            )
+        ),
+        
+        # Step 3: Preview & Download
+        div(class = "step-box",
+            h4(icon("eye"), " Step 3: Preview Renamed Files"),
+            actionButton("preview", "Generate Preview", 
+                         class = "btn-primary btn-lg",
+                         icon = icon("cogs"),
+                         style = "margin-bottom: 15px;"),
+            br(),
+            DTOutput("preview_table"),
+            br(),
+            uiOutput("download_ui")
+        )
+      ),
+      
+      # Info Box
+      div(class = "info-box",
+          h5(icon("info-circle"), " Target Format"),
+          p("Files will be renamed to: ", 
+            tags$code("CellLine_Treatment_ConcentrationuM_Replicate.fcs")),
+          p(strong("Examples:")),
+          tags$ul(
+            tags$li(tags$code("Ly18_YF2_0uM_Rep1.fcs")),
+            tags$li(tags$code("HT_DMSO_50uM_Rep2.fcs")),
+            tags$li(tags$code("SUDHL4_Compound_10.5uM_Rep1.fcs"))
+          ))
   ),
   
   # Footer
@@ -188,11 +188,18 @@ ui <- fluidPage(
       p("Université Grenoble Alpes | Institute for Advanced Biosciences"),
       p("mahmood.mohammed-ali@univ-grenoble-alpes.fr"),
       br(),
+      # License badge
       tags$a(href = "https://creativecommons.org/licenses/by-nc/4.0/", target = "_blank",
              tags$img(src = "https://licensebuttons.net/l/by-nc/4.0/88x31.png", 
                       alt = "CC BY-NC 4.0", 
-                      style = "border: 0;")))
+                      style = "border: 0;")),
+      # DOI badge
+      tags$a(href = "https://doi.org/10.5281/zenodo.17873024", target = "_blank",
+             tags$img(src = "https://zenodo.org/badge/1113365916.svg", 
+                      alt = "DOI: 10.5281/zenodo.17873024", 
+                      style = "border: 0; margin-left: 10px;")))
 )
+
 
 # ============================================================================
 # SERVER
@@ -209,26 +216,39 @@ server <- function(input, output, session) {
   
   # Upload status
   output$files_uploaded <- reactive({
-    !is.null(input$files)
+    !is.null(rv$files) && nrow(rv$files) > 0
   })
   outputOptions(output, "files_uploaded", suspendWhenHidden = FALSE)
   
   observeEvent(input$files, {
     req(input$files)
     
-    rv$files <- input$files
+    # 1) Append new files to previously stored ones
+    if (is.null(rv$files)) {
+      rv$files <- input$files
+    } else {
+      # Avoid duplicate rows if user re-selects same files
+      new <- input$files
+      existing_paths <- rv$files$datapath
+      
+      new <- new[!new$datapath %in% existing_paths, , drop = FALSE]
+      
+      rv$files <- rbind(rv$files, new)
+    }
     
-    # Extract unique rows and columns from filenames
-    rows <- unique(gsub(".*_([A-Z])[0-9]+\\.fcs$", "\\1", input$files$name, ignore.case = TRUE))
-    cols <- unique(as.numeric(gsub(".*_[A-Z]([0-9]+)\\.fcs$", "\\1", input$files$name, ignore.case = TRUE)))
+    # 2) Work always from rv$files (cumulative), not input$files
+    all_names <- rv$files$name
+    
+    rows <- unique(gsub(".*_([A-Z])[0-9]+\\.fcs$", "\\1", all_names, ignore.case = TRUE))
+    cols <- unique(as.numeric(gsub(".*_[A-Z]([0-9]+)\\.fcs$", "\\1", all_names, ignore.case = TRUE)))
     
     rv$rows <- sort(rows)
     rv$cols <- sort(cols)
     
     output$upload_status <- renderUI({
       div(class = "alert alert-success",
-          icon("check-circle"), " ", 
-          strong(nrow(input$files), " files uploaded"),
+          icon("check-circle"), " ",
+          strong(nrow(rv$files), " files uploaded (total across all selections)"),
           p(paste("Detected rows:", paste(rv$rows, collapse = ", "))),
           p(paste("Detected columns:", paste(rv$cols, collapse = ", "))))
     })
@@ -348,10 +368,33 @@ server <- function(input, output, session) {
       preview_df$concentration_uM[i] <- col_conc_map[as.character(col)]
     }
     
-    # Determine replicates (group by cell_line + treatment + concentration)
+    # Define well ID from row + col (A1, A2, ...)
+    preview_df$well_id <- paste0(preview_df$row, preview_df$col)
+    
     preview_df <- preview_df %>%
+      # Work per biological condition
       group_by(cell_line, treatment, concentration_uM) %>%
-      mutate(replicate = paste0("Rep", row_number())) %>%
+      # Keep the original order from the machine
+      mutate(
+        orig_index = row_number()
+      ) %>%
+      # Fixed ordering of wells (A1, A2, A3, ...)
+      mutate(
+        well_order = dense_rank(well_id)  # A1 = 1, A2 = 2, ...
+      ) %>%
+      arrange(orig_index, .by_group = TRUE) %>%
+      # For each well, how many times has it appeared so far in this condition?
+      group_by(well_id, .add = TRUE) %>%
+      mutate(
+        run_index = row_number()  # 1st time A1 appears, 2nd time A1 appears, etc.
+      ) %>%
+      ungroup() %>%
+      group_by(cell_line, treatment, concentration_uM) %>%
+      mutate(
+        n_wells         = n_distinct(well_id),
+        replicate_index = (run_index - 1) * n_wells + well_order,
+        replicate       = paste0("Rep", replicate_index)
+      ) %>%
       ungroup()
     
     # Create new names
